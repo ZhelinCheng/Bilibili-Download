@@ -1,0 +1,19 @@
+.main {
+  padding: 60px 66px;
+
+  .input {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+  }
+
+  :global {
+    
+
+    .MuiFab-secondary {
+        position:fixed;
+        right: 10%;
+        bottom: 10%;
+    }
+  }
+}
