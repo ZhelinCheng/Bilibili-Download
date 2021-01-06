@@ -2,8 +2,8 @@
  * @Author       : Zhelin Cheng
  * @Date         : 2021-01-04 17:49:53
  * @LastEditors  : Zhelin Cheng
- * @LastEditTime : 2021-01-04 17:57:39
- * @FilePath     : /Bilibili-Download/renderer/request/http.ts
+ * @LastEditTime : 2021-01-06 21:41:37
+ * @FilePath     : \Bilibili-Download\renderer\request\http.ts
  * @Description  : 未添加文件描述
  */
 
@@ -14,11 +14,11 @@ import axios, {
   AxiosError,
 } from 'axios'
 
-type Rq = (ops: AxiosRequestConfig) => Promise<Pick<AxiosResponse, 'data'>>
+type Rq = <T = any>(ops: AxiosRequestConfig) => Promise<T>
 
 export const rq = ((): Rq => {
   const ins: AxiosInstance = axios.create({
-    timeout: 5000,
+    timeout: 5000
   })
 
   // 请求拦截器

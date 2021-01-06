@@ -3,7 +3,7 @@ import {
   BrowserWindow,
   BrowserWindowConstructorOptions,
 } from 'electron';
-import * as Store from 'electron-store';
+import Store from 'electron-store';
 
 export default (windowName: string, options: BrowserWindowConstructorOptions): BrowserWindow => {
   const key = 'window-state';
@@ -71,6 +71,7 @@ export default (windowName: string, options: BrowserWindowConstructorOptions): B
     ...options,
     ...state,
     webPreferences: {
+      webSecurity: false,
       nodeIntegration: true,
       ...options.webPreferences,
     },

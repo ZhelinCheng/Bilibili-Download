@@ -1,8 +1,9 @@
-import { app } from 'electron';
+import { app, session, ipcMain } from 'electron';
 import serve from 'electron-serve';
 import { createWindow } from './helpers';
 
 const isProd: boolean = process.env.NODE_ENV === 'production';
+// const cookies = new Cookies()
 
 if (isProd) {
   serve({ directory: 'app' });
@@ -25,6 +26,13 @@ if (isProd) {
     await mainWindow.loadURL(`http://localhost:${port}/home`);
     mainWindow.webContents.openDevTools();
   }
+
+
+  ipcMain.on('cookie-message', (event, arg) => {
+    console.log(arg)
+    // session.defaultSession.cookies.set(arg)
+    event.reply('cookie-reply', 'pong')
+  })
 })();
 
 app.on('window-all-closed', () => {
