@@ -13,7 +13,7 @@ export default function App({ Component, pageProps }: AppProps) {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <title>Bilibili视频下载小助手</title>
       </Head>
-      <ConfigProvider locale={zhCN} componentSize="small">
+      <ConfigProvider locale={zhCN} componentSize="middle">
         <Component {...pageProps} />
       </ConfigProvider>
     </React.Fragment>
