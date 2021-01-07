@@ -4,8 +4,6 @@ import { createWindow } from './helpers'
 
 const isProd: boolean = process.env.NODE_ENV === 'production'
 
-
-
 if (isProd) {
   serve({ directory: 'app' })
 } else {
@@ -13,13 +11,14 @@ if (isProd) {
 }
 
 const loadURLOptions = {
-  userAgent: 'Mozilla/5.0 (iPhone; CPU iPhone OS 13_2_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.0.3 Mobile/15E148 Safari/604.1',
+  userAgent:
+    'Mozilla/5.0 (iPhone; CPU iPhone OS 13_2_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.0.3 Mobile/15E148 Safari/604.1',
   httpReferrer: 'https://www.bilibili.com/',
 }
 
 // Modify the user agent for all requests to the following urls.
 const filter = {
-  urls: ['https://*.bilibili.com/*']
+  urls: ['https://*.bilibili.com/*'],
 }
 
 ;(async () => {
@@ -38,13 +37,16 @@ const filter = {
     mainWindow.webContents.openDevTools()
   }
 
-  session.defaultSession.webRequest.onBeforeSendHeaders(filter, (details, callback) => {
-    details.requestHeaders['Referer'] = 'https://www.bilibili.com/'
-    callback({ requestHeaders: details.requestHeaders })
-  })
+  session.defaultSession.webRequest.onBeforeSendHeaders(
+    filter,
+    (details, callback) => {
+      details.requestHeaders['Referer'] = 'https://www.bilibili.com/'
+      callback({ requestHeaders: details.requestHeaders })
+    }
+  )
 
-  ipcMain.on('cookie-message', (event, arg) => {
-    console.log(1111)
+  ipcMain.on('cookie-message', (event) => {
+    // console.log(1111)
     // session.defaultSession.cookies.set(arg)
     event.reply('cookie-reply', 'pong')
   })

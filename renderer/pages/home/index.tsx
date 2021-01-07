@@ -1,35 +1,32 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import cx from 'classnames'
 
 import styles from './index.module.scss'
-import { UrlInput, VideosType } from '@components'
-import { setCookie } from 'utils'
+import { UrlInput, VideosType, DownloadList } from '@components'
+// import { setCookie } from 'utils'
 
-import { getDownloadUrl } from 'request'
+// import { getDownloadUrl } from 'request'
 
-const Home = () => {
-  const [{ bvid, videos }, setVideo] = useState<VideosType>({
-    bvid: '',
-    videos: []
-  })
+const Home = React.memo(
+  (): JSX.Element => {
+    // https://www.bilibili.com/video/BV1Hh411o7xu
 
-  useEffect(() => {
-    // setCookie('SESSDATA', '56208bdf%2C1618824139%2C4abb3*a1')
-  }, [])
+    // const [cidList, setCidList] = useState<number[]>([])
 
-  return (
-    <section className={cx(styles.main)}>
-      <UrlInput
-        onOk={(data) => {
-          setVideo(data)
-        }}
-      />
+    const [{ bvid, videos, avid }, setVideo] = useState<VideosType>({
+      avid: '',
+      bvid: '',
+      videos: [],
+    })
 
-      <div className={styles.videos}>
-        1111
-      </div>
-    </section>
-  )
-}
+    return (
+      <section className={cx(styles.main)}>
+        <UrlInput onOk={setVideo} />
+        {/* <Videos items={videos} onChange={setCidList} /> */}
+        <DownloadList items={videos} bvid={bvid} avid={avid} />
+      </section>
+    )
+  }
+)
 
 export default Home

@@ -2,7 +2,7 @@
  * @Author       : Zhelin Cheng
  * @Date         : 2021-01-04 17:49:53
  * @LastEditors  : Zhelin Cheng
- * @LastEditTime : 2021-01-06 21:41:37
+ * @LastEditTime : 2021-01-07 21:48:46
  * @FilePath     : \Bilibili-Download\renderer\request\http.ts
  * @Description  : 未添加文件描述
  */
@@ -18,7 +18,7 @@ type Rq = <T = any>(ops: AxiosRequestConfig) => Promise<T>
 
 export const rq = ((): Rq => {
   const ins: AxiosInstance = axios.create({
-    timeout: 5000
+    timeout: 5000,
   })
 
   // 请求拦截器
@@ -45,7 +45,7 @@ export const rq = ((): Rq => {
     (error: AxiosError) => {
       // console.error(error)
       if (error?.response?.status) {
-        const msg = error.response.data?.message
+        // const msg = error.response.data?.message
         // isBrowser && message.error(msg || '网络错误，请稍后重试！')
         return Promise.reject(error.response)
       } else {
