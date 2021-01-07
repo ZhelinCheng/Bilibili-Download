@@ -1,31 +1,24 @@
-import React from 'react';
-import Head from 'next/head';
-import { ThemeProvider } from '@material-ui/core/styles';
-import CssBaseline from '@material-ui/core/CssBaseline';
-import { theme } from '../lib/theme';
-import type { AppProps } from 'next/app';
+import React from 'react'
+import Head from 'next/head'
+import type { AppProps } from 'next/app'
+import { ConfigProvider } from 'antd'
+import zhCN from 'antd/lib/locale/zh_CN'
+import 'antd/dist/antd.css'
 
-export default function App (props: AppProps) {
-  const { Component, pageProps } = props;
-
-  React.useEffect(() => {
-    const jssStyles = document.querySelector('#jss-server-side');
-    if (jssStyles) {
-      jssStyles.parentElement.removeChild(jssStyles);
-    }
-  }, []);
-
+export default function App({ Component, pageProps }: AppProps) {
   return (
     <React.Fragment>
       <Head>
         <meta charSet="utf-8" />
-        <meta name="viewport" content="minimum-scale=1, initial-scale=1, width=device-width" />
+        <meta
+          name="viewport"
+          content="minimum-scale=1, initial-scale=1, width=device-width"
+        />
         <title>Bilibili视频下载小助手</title>
       </Head>
-      <ThemeProvider theme={theme}>
-        <CssBaseline />
+      <ConfigProvider locale={zhCN} componentSize="small">
         <Component {...pageProps} />
-      </ThemeProvider>
+      </ConfigProvider>
     </React.Fragment>
-  );
+  )
 }
