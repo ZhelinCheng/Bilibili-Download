@@ -1,70 +1,71 @@
 import React, { useCallback, useState } from 'react'
 import styles from './index.module.scss'
-import { getPageInfo } from '@request'
-import * as URL from 'url'
+import { getVideos } from '@request'
+import { Input, message } from 'antd'
 // import cheerio from 'cheerio'
 
-interface SupportFormats {
-  display_desc: string
-  format: string
-  new_description: string
-  quality: number
-  superscript: string
-}
+const Message = message
 
-export interface VideoDataType {
-  cid: number
+const { Search } = Input
+
+export interface VideosType {
   bvid: string
-  accept_description: string[]
-  accept_quality: number[]
-  support_formats: SupportFormats[]
+  videos: Array<{
+    cid: number
+    part: string
+  }>
 }
 
 interface UrlInputProps {
-  onOk?: (data: VideoDataType) => void
+  onOk?: (data: VideosType) => void
 }
 
 export const UrlInput = React.memo(
   ({ onOk }: UrlInputProps): JSX.Element => {
-    const [inputVal, setInputVal] = useState('')
-
-    const getMore = useCallback(async () => {
+    const getMore = useCallback(async (inputVal: string) => {
       try {
-        const url = URL.parse(inputVal)
-        const bvid = url.pathname ? url.pathname.split('/').pop() : inputVal
-        const html = await getPageInfo<string>(bvid)
-        const videoExec = /__playinfo__=({.*})<\/script>/.exec(html)
-        const cidExec = /"cid":(\d+),/.exec(html)
+        const bvidExec = /BV\w+/.exec(inputVal)
 
-        if (!videoExec || !cidExec) {
+        if (!bvidExec) {
+          return Message.info('输入不正确！')
         }
+        const bvid = bvidExec[0]
 
-        const cid = parseInt(cidExec[1])
-        const videoInfo = JSON.parse(videoExec[1])
+        const { data, code, message } = await getVideos<{
+          code: number
+          data: Array<{
+            cid: number
+            part: string
+          }>
+          message: string
+        }>(bvid)
 
-        // https://www.bilibili.com/video/BV1ax41197SG
-        console.log(videoInfo)
+        if (code !== 0) {
+          return Message.info(message)
+        }
 
         if (typeof onOk === 'function') {
           onOk({
-            cid,
             bvid,
-            ...videoInfo.data,
+            videos: data,
           })
         }
-      } catch (e) {}
-    }, [inputVal])
+      } catch (e) {
+        console.error(e)
+        Message.error('发生错误了')
+      }
+    }, [])
 
-    const handleClose = useCallback(
-      (event?: React.SyntheticEvent, reason?: string) => {
-        if (reason === 'clickaway') {
-          return
-        }
-      },
-      []
+    return (
+      <div className={styles.input}>
+        <Search
+          placeholder="请输入视频地址"
+          allowClear
+          enterButton="查看"
+          onSearch={getMore}
+        />
+      </div>
     )
-
-    return <div className={styles.input}>111</div>
   }
 )
 

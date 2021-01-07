@@ -1,40 +1,55 @@
-import { app, session, ipcMain } from 'electron';
-import serve from 'electron-serve';
-import { createWindow } from './helpers';
+import { app, session, ipcMain } from 'electron'
+import serve from 'electron-serve'
+import { createWindow } from './helpers'
 
-const isProd: boolean = process.env.NODE_ENV === 'production';
-// const cookies = new Cookies()
+const isProd: boolean = process.env.NODE_ENV === 'production'
+
+
 
 if (isProd) {
-  serve({ directory: 'app' });
+  serve({ directory: 'app' })
 } else {
-  app.setPath('userData', `${app.getPath('userData')} (development)`);
+  app.setPath('userData', `${app.getPath('userData')} (development)`)
 }
 
-(async () => {
-  await app.whenReady();
+const loadURLOptions = {
+  userAgent: 'Mozilla/5.0 (iPhone; CPU iPhone OS 13_2_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.0.3 Mobile/15E148 Safari/604.1',
+  httpReferrer: 'https://www.bilibili.com/',
+}
+
+// Modify the user agent for all requests to the following urls.
+const filter = {
+  urls: ['https://*.bilibili.com/*']
+}
+
+;(async () => {
+  await app.whenReady()
 
   const mainWindow = createWindow('main', {
     width: 800,
     height: 600,
-  });
+  })
 
   if (isProd) {
-    await mainWindow.loadURL('app://./home.html');
+    await mainWindow.loadURL('app://./home.html', loadURLOptions)
   } else {
-    const port = process.argv[2];
-    await mainWindow.loadURL(`http://localhost:${port}/home`);
-    mainWindow.webContents.openDevTools();
+    const port = process.argv[2]
+    await mainWindow.loadURL(`http://localhost:${port}/home`, loadURLOptions)
+    mainWindow.webContents.openDevTools()
   }
 
+  session.defaultSession.webRequest.onBeforeSendHeaders(filter, (details, callback) => {
+    details.requestHeaders['Referer'] = 'https://www.bilibili.com/'
+    callback({ requestHeaders: details.requestHeaders })
+  })
 
   ipcMain.on('cookie-message', (event, arg) => {
     console.log(1111)
     // session.defaultSession.cookies.set(arg)
     event.reply('cookie-reply', 'pong')
   })
-})();
+})()
 
 app.on('window-all-closed', () => {
-  app.quit();
-});
+  app.quit()
+})

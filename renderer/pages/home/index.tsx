@@ -2,20 +2,15 @@ import React, { useEffect, useState } from 'react'
 import cx from 'classnames'
 
 import styles from './index.module.scss'
-import { UrlInput, VideoDataType } from '@components'
-import { Button } from 'antd';
-
+import { UrlInput, VideosType } from '@components'
 import { setCookie } from 'utils'
 
 import { getDownloadUrl } from 'request'
 
 const Home = () => {
-  const [{ support_formats, cid, bvid }, setVideo] = useState<VideoDataType>({
-    cid: 0,
+  const [{ bvid, videos }, setVideo] = useState<VideosType>({
     bvid: '',
-    accept_description: [],
-    accept_quality: [],
-    support_formats: [],
+    videos: []
   })
 
   useEffect(() => {
@@ -30,15 +25,8 @@ const Home = () => {
         }}
       />
 
-      <div className={styles.lists}>
-        {support_formats.map(({ new_description, quality }) => {
-          return (
-            <div key={quality} className={styles['list-item']}>
-              <span className={styles.text}>{new_description}</span>
-              <div className={styles.btns}></div>
-            </div>
-          )
-        })}
+      <div className={styles.videos}>
+        1111
       </div>
     </section>
   )

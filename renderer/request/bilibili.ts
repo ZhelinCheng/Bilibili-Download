@@ -2,7 +2,7 @@
  * @Author       : Zhelin Cheng
  * @Date         : 2021-01-04 17:54:10
  * @LastEditors  : Zhelin Cheng
- * @LastEditTime : 2021-01-07 12:46:57
+ * @LastEditTime : 2021-01-07 17:20:34
  * @FilePath     : /Bilibili-Download/renderer/request/bilibili.ts
  * @Description  : 未添加文件描述
  */
@@ -33,6 +33,17 @@ export const getDownloadUrl = <T>(params: DownloadParamsType) => {
       platform: 'html5',
       type: 'mp4',
       ...params
+    }
+  })
+}
+
+// 获取列表
+export const getVideos = <T>(bvid: string) => {
+  return rq<T>({
+    url: 'https://api.bilibili.com/x/player/pagelist',
+    params: {
+      bvid,
+      jsonp: 'jsonp',
     }
   })
 }
