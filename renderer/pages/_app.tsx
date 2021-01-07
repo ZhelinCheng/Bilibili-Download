@@ -10,10 +10,7 @@ export default function App({ Component, pageProps }: AppProps) {
     <React.Fragment>
       <Head>
         <meta charSet="utf-8" />
-        <meta
-          name="viewport"
-          content="minimum-scale=1, initial-scale=1, width=device-width"
-        />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
         <title>Bilibili视频下载小助手</title>
       </Head>
       <ConfigProvider locale={zhCN} componentSize="small">
