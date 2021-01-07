@@ -63,6 +63,9 @@ export const UrlInput = React.memo(
         const cid = parseInt(cidExec[1])
         const videoInfo = JSON.parse(videoExec[1])
 
+        // https://www.bilibili.com/video/BV1ax41197SG
+        console.log(videoInfo)
+
         if (typeof onOk === 'function') {
           onOk({
             cid,

@@ -29,7 +29,7 @@ if (isProd) {
 
 
   ipcMain.on('cookie-message', (event, arg) => {
-    console.log(arg)
+    console.log(1111)
     // session.defaultSession.cookies.set(arg)
     event.reply('cookie-reply', 'pong')
   })
