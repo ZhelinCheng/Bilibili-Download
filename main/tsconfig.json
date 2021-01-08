@@ -1,0 +1,14 @@
+{
+    "compilerOptions": {
+      "baseUrl": "./",
+      "paths": {
+        "@request": ["./request"],
+        "@utils": ["./utils"],
+        "@": ["./"]
+      }
+    },
+    "extends": "../tsconfig.json",
+    "include": ["main-env.d.ts", "**/*.ts"],
+    "exclude": ["node_modules"]
+  }
+  
