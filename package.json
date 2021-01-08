@@ -39,6 +39,7 @@
     "electron-serve": "^1.0.0",
     "electron-store": "^6.0.1",
     "ffmpeg-static": "^4.2.7",
+    "fs-extra": "^9.0.1",
     "lowdb": "^1.0.0",
     "react-fast-compare": "^3.2.0",
     "sass": "^1.32.0"
