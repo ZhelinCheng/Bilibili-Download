@@ -41,9 +41,16 @@ const filter = {
     filter,
     (details, callback) => {
       details.requestHeaders['Referer'] = 'https://www.bilibili.com/'
+      details.requestHeaders['Cookie'] = 'aaa=12121'
+      details.requestHeaders['Origin'] = 'https://www.bilibili.com/'
       callback({ requestHeaders: details.requestHeaders })
     }
   )
+
+  /* session.defaultSession.webRequest.onResponseStarted(filter, (details, callback) => {
+    details.responseHeaders['access-control-allow-origin'] = '*'
+    callback({ responseHeaders: details.responseHeaders })
+  }) */
 
   ipcMain.on('cookie-message', (event) => {
     // console.log(1111)
