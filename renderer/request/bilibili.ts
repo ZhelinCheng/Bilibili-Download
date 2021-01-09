@@ -2,7 +2,7 @@
  * @Author       : Zhelin Cheng
  * @Date         : 2021-01-04 17:54:10
  * @LastEditors  : Zhelin Cheng
- * @LastEditTime : 2021-01-07 21:33:30
+ * @LastEditTime : 2021-01-08 22:04:01
  * @FilePath     : \Bilibili-Download\renderer\request\bilibili.ts
  * @Description  : 未添加文件描述
  */
@@ -19,9 +19,6 @@ export const getPageInfo = <T>(bvid: string): Promise<T> => {
 interface DownloadParamsType {
   cid: number
   bvid: string
-  qn?: number
-  high_quality: number
-  type?: string
 }
 
 // 获取下载链接mp4
@@ -31,6 +28,8 @@ export const getDownloadUrl = <T>(params: DownloadParamsType): Promise<T> => {
     params: {
       platform: 'html5',
       type: 'mp4',
+      high_quality: 1,
+      qn: 80,
       ...params,
     },
   })

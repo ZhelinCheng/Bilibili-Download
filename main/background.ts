@@ -1,5 +1,7 @@
-import { app, session, ipcMain } from 'electron'
+import { app, session, ipcMain, dialog } from 'electron'
 import serve from 'electron-serve'
+// import path from 'path'
+// import child_process from 'child_process'
 import { createWindow } from './helpers'
 
 const isProd: boolean = process.env.NODE_ENV === 'production'
@@ -18,7 +20,7 @@ const loadURLOptions = {
 
 // Modify the user agent for all requests to the following urls.
 const filter = {
-  urls: ['https://*.bilibili.com/*'],
+  urls: ['https://*.bilibili.com/*', 'https://*.bilivideo.com/*'],
 }
 
 ;(async () => {
@@ -40,23 +42,54 @@ const filter = {
   session.defaultSession.webRequest.onBeforeSendHeaders(
     filter,
     (details, callback) => {
+      // console.log(1111)
       details.requestHeaders['Referer'] = 'https://www.bilibili.com/'
-      details.requestHeaders['Cookie'] = 'aaa=12121'
-      details.requestHeaders['Origin'] = 'https://www.bilibili.com/'
+      // details.requestHeaders['Cookie'] = 'aaa=12121'
+      // details.requestHeaders['Origin'] = 'https://www.bilibili.com/'
       callback({ requestHeaders: details.requestHeaders })
     }
   )
+  // 打开文件夹
+  const openFileDialog = async (oldPath: string = app.getPath('downloads')) => {
+    if (!mainWindow) return oldPath
 
-  /* session.defaultSession.webRequest.onResponseStarted(filter, (details, callback) => {
-    details.responseHeaders['access-control-allow-origin'] = '*'
-    callback({ responseHeaders: details.responseHeaders })
+    const { canceled, filePaths } = await dialog.showOpenDialog(mainWindow, {
+      title: '选择保存位置',
+      properties: ['openDirectory', 'createDirectory'],
+      defaultPath: oldPath,
+    })
+
+    return !canceled ? filePaths[0] : oldPath
+  }
+  ipcMain.handle('openFileDialog', (event, oldPath?: string) =>
+    openFileDialog(oldPath)
+  )
+
+  /* ipcMain.handle('download', (event, url: string) => {
+    mainWindow.webContents.downloadURL('https://api.aiiuii.com/v4/device')
+
+    // 监听 will-download
+    session.defaultSession.on('will-download', (event, item, webContents) => {
+      item.on('updated', (event, state) => {
+        if (state === 'interrupted') {
+          console.log('Download is interrupted but can be resumed')
+        } else if (state === 'progressing') {
+          if (item.isPaused()) {
+            console.log('Download is paused')
+          } else {
+            console.log(`Received bytes: ${item.getReceivedBytes()}`)
+          }
+        }
+      })
+      item.once('done', (event, state) => {
+        if (state === 'completed') {
+          console.log('Download successfully')
+        } else {
+          console.log(`Download failed: ${state}`)
+        }
+      })
+    })
   }) */
-
-  ipcMain.on('cookie-message', (event) => {
-    // console.log(1111)
-    // session.defaultSession.cookies.set(arg)
-    event.reply('cookie-reply', 'pong')
-  })
 })()
 
 app.on('window-all-closed', () => {
